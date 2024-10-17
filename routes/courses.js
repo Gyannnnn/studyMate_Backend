@@ -1,16 +1,16 @@
-const {Router} = require("express");
+const { Router } = require("express");
 
 const courseRouter = Router();
-const {courses} =  require("../database/db")
+const { courses } = require("../database/db")
 
-courseRouter.get("/preview",(req,res)=>{
+courseRouter.get("/preview", (req, res) => {
     res.json({
-        message:"Corse Page"
+        message: "Corse Page"
     })
 });
-courseRouter.get("/purchase",(req,res)=>{
+courseRouter.get("/purchase", (req, res) => {
     res.json({
-        message:"Purchases Page"
+        message: "Purchases Page"
     })
 });
 
