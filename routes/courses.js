@@ -1,6 +1,7 @@
 const {Router} = require("express");
 
 const courseRouter = Router();
+const {courses} =  require("../db")
 
 courseRouter.get("/preview",(req,res)=>{
     res.json({
