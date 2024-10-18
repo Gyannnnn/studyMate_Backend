@@ -13,7 +13,7 @@ userRouter.post("/signup", async (req, res) => {
         email: z.string().email(),
         password: z.string().min(3).max(10),
         firstName: z.string().min(5).max(20),
-        lastName: z.string().min(4).max(10)
+        lastName: z.string().min(4).max(10) 
     });
 
     const parsedDataWithSuccess = requiredBody.safeParse(req.body);
@@ -102,14 +102,14 @@ async function  auth(req,res,next){
 }
 
 
-userRouter.get("/purchases", (req, res) => {
+userRouter.get("/purchases",auth, (req, res) => {
     res.json({
         purchse: "page"
     })
 })
 
 
-userRouter.get("/user/purchases", (req, res) => {
+userRouter.get("/user/purchases",auth, (req, res) => {
     res.json({
         message: "Signin Page"
     })
