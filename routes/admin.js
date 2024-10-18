@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const { adminModel } = require("../database/db");
 const { z } = require('zod');
-const bcrypt = require('bcrypt')
-
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken")
+const JWT_ADMIN_SECRET  = "iuqvbeiubivubpqbquiedfbpiubn"
  const adminRouter = Router();
 
 adminRouter.post("/signup", async(req, res) => {
@@ -42,10 +43,44 @@ adminRouter.post("/signup", async(req, res) => {
 });
 
 
-adminRouter.post("/signin", (req, res) => {
-    res.json({
-        message: "Signin Page"
-    })
+adminRouter.post("/signin", async(req, res) => {
+    const { email, password } = req.body;
+    const admin = await adminModel.findOne({
+        email
+    });
+    if (!admin) {
+        console.log("Admin Not Found");
+        return res.json({
+            message: "Admin Not Found"
+        })
+    };
+    try {
+        const comparedPassword = await bcrypt.compare(password, admin.password);
+        if(!comparedPassword){
+            console.warn("Incorrect Password Attempt")
+        }
+        if (comparedPassword) {
+            const token = jwt.sign({
+                id:admin._id.toString()
+            }, JWT_ADMIN_SECRET);
+            console.log("Admin Successfully Signed In");
+            return res.status(200).json({
+                message: "Admin SignIn Successull",
+                token: token
+            })
+           
+        }else{
+            res.json({
+                message:"Incorrect Password"
+            })
+        }
+       
+    } catch (error) {
+        console.log("Error In SigningIn :" + error);
+        return res.json({
+            message: error.message
+        })
+    }
 });
 
 
