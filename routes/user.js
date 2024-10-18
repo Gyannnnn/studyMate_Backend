@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { z } = require('zod');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "iubwevsiupfbuipbwfqweqewgf"
+const JWT_USER_SECRET = "iubwevsiupfbuipbwfqweqewgf"
 
 
 const userRouter = Router();
