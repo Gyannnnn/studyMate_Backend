@@ -64,7 +64,7 @@ userRouter.post("/signin", async (req, res) => {
         }
         if (comparedPassword) {
             const token = jwt.sign({
-                email
+                id:user._id.toString()
             }, JWT_SECRET);
             console.log("User Successfully Signed In");
             return res.status(200).json({
@@ -85,6 +85,22 @@ userRouter.post("/signin", async (req, res) => {
         })
     }
 });
+
+async function  auth(req,res,next){
+    const token = req.headers.token;
+    const decodedData   = jwt.verify(token,JWT_SECRET);
+
+    if(decodedData){
+        req.userId = decodedData.id;
+        next()
+    }else{
+        return res.json({
+            message:"Incorrect Credential"
+        })
+    }
+
+}
+
 
 userRouter.get("/purchases", (req, res) => {
     res.json({
