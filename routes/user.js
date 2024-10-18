@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const { z } = require('zod');
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = "iubwevsiupfbuipbwfqweqewgf"
 
 
 const userRouter = Router();
@@ -44,10 +46,44 @@ userRouter.post("/signup", async (req, res) => {
 });
 
 
-userRouter.post("/signin", (req, res) => {
-    res.json({
-        message: "Signin Page"
-    })
+userRouter.post("/signin", async (req, res) => {
+    const { email, password } = req.body;
+    const user = await userModel.findOne({
+        email
+    });
+    if (!user) {
+        console.log("User Not Found");
+        return res.json({
+            message: "User Not Found"
+        })
+    };
+    try {
+        const comparedPassword = await bcrypt.compare(password, user.password);
+        if(!comparedPassword){
+            console.warn("Incorrect Password Attempt")
+        }
+        if (comparedPassword) {
+            const token = jwt.sign({
+                email
+            }, JWT_SECRET);
+            console.log("User Successfully Signed In");
+            return res.status(200).json({
+                message: "SignIn Successull",
+                token: token
+            })
+           
+        }else{
+            res.json({
+                message:"Incorrect Password"
+            })
+        }
+       
+    } catch (error) {
+        console.log("Error In SigningIn :" + error);
+        return res.json({
+            message: error.message
+        })
+    }
 });
 
 userRouter.get("/purchases", (req, res) => {
