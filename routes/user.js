@@ -65,7 +65,7 @@ userRouter.post("/signin", async (req, res) => {
         if (comparedPassword) {
             const token = jwt.sign({
                 id:user._id.toString()
-            }, JWT_SECRET);
+            }, JWT_USER_SECRET);
             console.log("User Successfully Signed In");
             return res.status(200).json({
                 message: "SignIn Successull",
