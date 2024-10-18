@@ -63,7 +63,7 @@ adminRouter.post("/signin", async(req, res) => {
             const token = jwt.sign({
                 id:admin._id.toString()
             }, JWT_ADMIN_SECRET);
-            console.log("Admin Successfully Signed In");
+            console.warn("Admin Successfully Signed In");
             return res.status(200).json({
                 message: "Admin SignIn Successull",
                 token: token
