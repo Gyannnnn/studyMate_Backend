@@ -17,7 +17,7 @@ adminRouter.post("/signin", (req, res) => {
 });
 
 
-adminRouter.post("/course", (req, res) => {
+adminRouter.post("/", (req, res) => {
     res.json({
         message: "course page"
     })
@@ -29,7 +29,7 @@ adminRouter.put("/course", (req, res) => {
     })
 });
 
-adminRouter.get("/course/bulk", (req, res) => {
+adminRouter.get("/bulk", (req, res) => {
     res.json({
         message: "course page"
     })
