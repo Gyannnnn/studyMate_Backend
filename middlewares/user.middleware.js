@@ -1,9 +1,9 @@
 const jwt  = require("jsonwebtoken");
-
+const JWT_USER_SECRET="iubwevsiupfbuipbwfqweqewgf"
 
 function userMiddleware(req,res,next){
     const token = req.headers.token;
-    const decodedData = jwt.verify(token,process.env.JWT_USER_SECRET)
+    const decodedData = jwt.verify(JWT_USER_SECRET)
     if(decodedData){
         req.userId = decodedData.id;
         next();
@@ -14,6 +14,4 @@ function userMiddleware(req,res,next){
     }
 }
 
-module.exports = {
-    userMiddleware
-}
+module.exports =  userMiddleware

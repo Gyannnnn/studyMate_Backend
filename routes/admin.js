@@ -3,14 +3,17 @@ const { adminModel } = require("../database/db");
 const { z } = require('zod');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
- const adminRouter = Router();
+const JWT_ADMIN_SECRET = "iuqvbeiubivubpqbquiedfbpiubn"
+const adminRouter = Router();
+const { courseModel } = require("../database/db");
+const adminMiddleware = require("../middlewares/admin.middleware")
 
-adminRouter.post("/signup", async(req, res) => {
+adminRouter.post("/signup", async (req, res) => {
     const requiredBody = z.object({
         email: z.string().email(),
         password: z.string().min(3).max(10),
         firstName: z.string().min(5).max(20),
-        lastName: z.string().min(4).max(10) 
+        lastName: z.string().min(4).max(10)
     });
 
     const parsedDataWithSuccess = requiredBody.safeParse(req.body);
@@ -42,7 +45,7 @@ adminRouter.post("/signup", async(req, res) => {
 });
 
 
-adminRouter.post("/signin", async(req, res) => {
+adminRouter.post("/signin", async (req, res) => {
     const { email, password } = req.body;
     const admin = await adminModel.findOne({
         email
@@ -55,25 +58,26 @@ adminRouter.post("/signin", async(req, res) => {
     };
     try {
         const comparedPassword = await bcrypt.compare(password, admin.password);
-        if(!comparedPassword){
+        if (!comparedPassword) {
             console.warn("Incorrect Password Attempt")
         }
         if (comparedPassword) {
             const token = jwt.sign({
-                id:admin._id.toString()
-            },process.env.JWT_ADMIN_SECRET);
-            console.warn("Admin Successfully Signed In");
+                id: admin._id.toString()
+            }, JWT_ADMIN_SECRET);
+            console.warn("Admin Successfully Signed In b");
+            console.log(admin._id)
             return res.status(200).json({
                 message: "Admin SignIn Successull",
                 token: token
             })
-           
-        }else{
+
+        } else {
             res.json({
-                message:"Incorrect Password"
+                message: "Incorrect Password"
             })
         }
-       
+
     } catch (error) {
         console.log("Error In SigningIn :" + error);
         return res.json({
@@ -83,11 +87,21 @@ adminRouter.post("/signin", async(req, res) => {
 });
 
 
-adminRouter.post("/", (req, res) => {
-    res.json({
-        message: "course page"
+adminRouter.post("/course", adminMiddleware, async (req, res) => {
+    const adminId = req.adminId;
+    const { title, description, price, imageUrl, createrId } = req.body
+    const courses = await courseModel.create({
+        title,
+        description,
+        price,
+        imageUrl,
+        createrId:adminId,
     })
-})
+    console.log(courses);
+    res.json({
+        message: "Corses Created Successfully"
+    })
+});
 
 adminRouter.put("/course", (req, res) => {
     res.json({

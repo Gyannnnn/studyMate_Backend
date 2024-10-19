@@ -2,7 +2,7 @@ const { Router } = require("express");
 
 const courseRouter = Router();
 const { courseModel } = require("../database/db");
-const  { userMiddleware } = require("../middlewares/user.middleware")
+const  adminMiddleware  = require("../middlewares/admin.middleware")
 
 
 async function  auth(req,res,next){
@@ -21,11 +21,7 @@ async function  auth(req,res,next){
 }
 
 
-courseRouter.get("/preview",userMiddleware, (req, res) => {
-    res.json({
-        message: "Corse Page"
-    })
-});
+
 courseRouter.get("/purchase",auth, (req, res) => {
     res.json({
         message: "Purchases Page"

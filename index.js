@@ -28,7 +28,7 @@ async function db() {
 
     } catch (error) {
         console.log("Error In Connecting Database :"+ error )
-        return resizeBy.json({
+        return ({
             message: error
         })
     }

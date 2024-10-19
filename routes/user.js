@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config()
 
+const JWT_USER_SECRET="iubwevsiupfbuipbwfqweqewgf"
 
 const userRouter = Router();
 const { userModel } = require("../database/db")
@@ -65,7 +66,7 @@ userRouter.post("/signin", async (req, res) => {
         if (comparedPassword) {
             const token = jwt.sign({
                 id:user._id.toString()
-            }, process.env.JWT_USER_SECRET);
+            },JWT_USER_SECRET);
             console.log("User Successfully Signed In");
             return res.status(200).json({
                 message: "SignIn Successull",
