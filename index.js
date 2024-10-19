@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -20,7 +22,7 @@ app.use("/api/v1/admin", adminRouter)
 
 async function db() {
     try {
-        await mongoose.connect("mongodb+srv://higyanaranjanpatra:db123@cluster0.2svfp.mongodb.net/studyMate");
+        await mongoose.connect(process.env.MONGO_URL);
         console.log("Successfully connected To The Db")
         app.listen(3000, () => {
             console.log("Server Is Running At http://localhost:3000")
