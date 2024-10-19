@@ -3,7 +3,6 @@ const { adminModel } = require("../database/db");
 const { z } = require('zod');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
-const JWT_ADMIN_SECRET  = "iuqvbeiubivubpqbquiedfbpiubn"
  const adminRouter = Router();
 
 adminRouter.post("/signup", async(req, res) => {
@@ -62,7 +61,7 @@ adminRouter.post("/signin", async(req, res) => {
         if (comparedPassword) {
             const token = jwt.sign({
                 id:admin._id.toString()
-            }, JWT_ADMIN_SECRET);
+            },process.env.JWT_ADMIN_SECRET);
             console.warn("Admin Successfully Signed In");
             return res.status(200).json({
                 message: "Admin SignIn Successull",

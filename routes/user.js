@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { z } = require('zod');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const JWT_USER_SECRET = "iubwevsiupfbuipbwfqweqewgf"
+const dotenv = require("dotenv").config()
 
 
 const userRouter = Router();
@@ -65,7 +65,7 @@ userRouter.post("/signin", async (req, res) => {
         if (comparedPassword) {
             const token = jwt.sign({
                 id:user._id.toString()
-            }, JWT_USER_SECRET);
+            }, process.env.JWT_USER_SECRET);
             console.log("User Successfully Signed In");
             return res.status(200).json({
                 message: "SignIn Successull",
